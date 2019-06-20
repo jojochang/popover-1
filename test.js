@@ -4,7 +4,23 @@ var e = (selector) => {
     return element
 }
 
+var es = (selector) => {
+    var elements = document.querySelectorAll(selector)
+    return elements
+}
+
 var appendHtml = (element, html) => element.insertAdjacentHTML('beforeend', html)
+
+var closest = (element, selector) => {
+    var element = element.parentElement
+    while (element != null) {
+        if (element.className == selector || element.id == selector || element.tagName == selector) {
+            return element
+        }
+        element = element.parentElement
+    }
+    return null
+}
 
 
 class Tog {
@@ -31,8 +47,10 @@ class Tog {
 
 
     show() {
-        var box = e('.red')       
+        // var box = e('.red')       
         var btn = e(`.${this.trigger}`)
+        var wrapper = closest(btn, 'wrapper')
+        var box = wrapper.querySelector('.red')
         btn.addEventListener('click', (event) => {
             if (!box.classList.contains('show')) {
                 // 显示box
@@ -48,12 +66,17 @@ class Tog {
 
     hidden() {
         var cot = e('.container')
-        var box = e('.red')
+        var boxes = es('.red')
+        // var wrapper = closest(btn, 'wrapper')
+        // var box = wrapper.querySelector('.red')
         cot.addEventListener('click', (event) => {
             var self = event.target
             // log(self)
             if (!self.classList.contains('btn') && !self.classList.contains('red')) {
-                box.classList.remove('show')
+                for (let index = 0; index < boxes.length; index++) {
+                    const element = boxes[index]
+                    element.classList.remove('show')
+                }
             }
         })
     }
